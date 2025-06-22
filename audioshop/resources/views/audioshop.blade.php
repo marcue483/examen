@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="custom.css">
-    <script src="custom.js"></script>
+    @vite('resources/js/app.js')
+    @vite('resources/css/app.css')
 </head>
 <body>
     <nav>
@@ -71,44 +71,26 @@
         </div>
     </div>
 
-    <!-- Third container -->
-    <?php
-        $server="localhost";
-        $username="root";
-        $password="";
-        $dbname="audioshop";
-        $conn=new mysqli($server,$username,$password,$dbname);
-    ?>
-
     <div class="container3" id="container3">
         <div class="new">GALLERY</div>
-        <div class="gallerycontainer">
-            <?php
-                $images = [];
-                $sql = "SELECT filename FROM images";
-                $result = $conn->query($sql);
-                if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $images[] = 'images/' . $row['filename'];
-                    }
-                }
-            ?>
-            <?php foreach ($images as $index => $image): ?>
-                <div class="slide <?php echo $index === 0 ? 'active' : ''; ?>">
-                    <img class="galleryimage" src="<?php echo $image; ?>" alt="Gallery image">
-                </div>
-            <?php endforeach; ?>
+        <div class=gallerycontainer>
+@foreach ($images as $image)
+                    <div class="slide" style="display: none;">
+                        <img class="galleryimage" src="{{ asset('images/' . $image->filename) }}" alt="Gallery Image">
+                    </div>
+                @endforeach
 
             <div class="navigation">
                 <a class="arrowleft" onclick="plusSlides(-1)"></a>
-                <div>
-                    <?php foreach ($images as $index => $image): ?>
-                        <button class="selectbutton <?php echo $index === 0 ? 'active' : ''; ?>" onclick="currentSlide(<?php echo $index + 1; ?>)"></button>
-                    <?php endforeach; ?>
-                </div>
+                    <div>
+                    @foreach ($images as $index => $image)
+                        <button class="selectbutton" data-index="{{ $index }}"></button>
+                    @endforeach
+                    </div>
                 <a class="arrowright" onclick="plusSlides(1)"></a>
             </div>
         </div>
+    
     </div>
     <hr>
     <footer>
